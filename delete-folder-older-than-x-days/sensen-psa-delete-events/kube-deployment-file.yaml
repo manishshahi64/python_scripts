@@ -1,0 +1,119 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: delete-folder
+  labels:
+    app: delete-folder
+spec:
+  template:
+    metadata:
+      labels:
+        pod: delete-folder
+    spec:
+      affinity:
+         nodeAffinity:
+           preferredDuringSchedulingIgnoredDuringExecution:
+           - weight: 1
+             preference:
+               matchExpressions:
+               - key: node
+                 operator: In
+                 values:
+                 - slave
+      restartPolicy: Never
+      hostname: delete-folder
+      containers:
+      - name: delete-folder
+        image: delete_events_files:1.1
+        imagePullPolicy: IfNotPresent
+        command: [ "/bin/sh", "-c", "python3 delete_folder.py" ]
+        env:
+        - name: TZ
+          value: Singapore
+        volumeMounts:
+        - name: delete-folder-pv-2023
+          mountPath: /container/mount/path/
+        - name: delete-folder-pv-2024
+          mountPath: /container/mount/path/python-script-folder
+      volumes:
+      - name: delete-folder-pv-2023
+        persistentVolumeClaim:
+          claimName: delete-folder-pvc-2023
+      - name: delete-folder-pv-2024
+        persistentVolumeClaim:
+          claimName: delete-folder-pvc-2024
+---
+  apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    name: delete-folder-pv-2023
+    labels:
+      type: local1
+  spec:
+    capacity:
+      storage: 350Gi
+    accessModes:
+      - ReadWriteMany
+    hostPath:
+      path: /host/path
+    nodeAffinity:
+     required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: node
+          operator: In
+          values:
+          - slave
+---
+  apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: delete-folder-pvc-2023
+    labels:
+      type: local
+  spec:
+    storageClassName: ""
+    accessModes:
+      - ReadWriteMany
+    resources:
+      requests:
+        storage: 350Gi
+    volumeName: delete-folder-pv-2023
+---
+  apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    name: delete-folder-pv-2024
+    labels:
+      type: local1
+  spec:
+    capacity:
+      storage: 3Gi
+    accessModes:
+      - ReadWriteMany
+    hostPath:
+      path: /host/path/python-script-folder
+    nodeAffinity:
+     required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: node
+          operator: In
+          values:
+          - slave
+---
+  apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: delete-folder-pvc-2024
+    labels:
+      type: local
+  spec:
+    storageClassName: ""
+    accessModes:
+      - ReadWriteMany
+    resources:
+      requests:
+        storage: 3Gi
+    volumeName: delete-folder-pv-2024
+---

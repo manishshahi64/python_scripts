@@ -1,0 +1,10 @@
+FROM python:3.8-buster
+ENV PYTHONUNBUFFERED 1
+RUN useradd -ms /bin/bash sensen
+RUN apt update && apt install libgl1-mesa-dev -y
+USER sensen
+WORKDIR /home/user/my-files
+COPY requirements.txt /home/user/my-files
+ENV PATH="/home/user/.local/bin:${PATH}"
+RUN pip3 install --upgrade pip 
+RUN pip3 install -r requirements.txt
