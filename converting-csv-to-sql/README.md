@@ -2,8 +2,8 @@ This script will convert a csv file with multiple values to sql query
 
 example :
 
-Tom,Imphal,Men,2,0,0,2
-Sia,Delhi,Women,1,0,0,30
+Tom,Imphal,Men,2,0,0,2 
+Sia,Delhi,Women,1,0,0,30 
 
 convert to :
 
