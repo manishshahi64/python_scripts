@@ -19,14 +19,14 @@ with open('file_name_copy.csv', 'r') as csv_file:
                 
                 # Create the SQL statement
                 sql_statement = (
-                    f"update sn_cameras "
+                    f"update my_family "
                     f"set name='{name}', "
                     f"location='{location}', "
                     f"type='{type}', "
                     f"fk_host={fk_host}, "
-                    f"channel={road_num}, "
-                    f"local_channel={local_road_num} "
-                    f"WHERE pk_camera={pk__name};\n"
+                    f"road_num={road_num}, "
+                    f"local_road_num={local_road_num} "
+                    f"WHERE pk_name={pk__name};\n"
                 )
                 
                 # Write the SQL statement to the SQL file
